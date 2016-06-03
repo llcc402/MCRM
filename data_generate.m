@@ -4,8 +4,8 @@
 %     mu_1 = 1/2 N(-5,1) + 1/2 N(-10,1)
 %     mu_2 = 1/2 N(10,1) + 1/2 N(15,1)
 % 
-%     p_1 = mu_0 + mu_1
-%     p_2 = mu_0 + mu_2
+%     p_1 = 0.1 * mu_0 + 0.2 * mu_1 + 0.7 * mu_3
+%     p_2 = 0.7 * mu_0 + 0.2 * mu_2 + 0.1 * mu_3
 
 function data = data_generate()
 
@@ -18,7 +18,7 @@ x6 = randn(1, 100) + 15;
 
 data = zeros(2, 400);
 data(1,:) = [x1, x2, x3, x4];
-data(2,:) = [x1, x2, x5, x6];
+data(2,:) = [x1, x2, x3, x4];
 
 figure(1)
 hist(data(1,:), 50)

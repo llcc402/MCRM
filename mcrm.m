@@ -8,21 +8,21 @@ if nargin < 3
 end
 
 % all observations in one cluster
-ix = ones(size(data,2)); 
-centers = zeros(size(data,2)) + mean(mean(data));
+ix = ones(size(data)); 
+centers = zeros(1, size(data,2)) + mean(mean(data));
 
 % auxiliary variable
 u = ones(1,2);
 u_vec = ones(1, maxIter);
 
 % learning pace for u
-pace = 0.1;
+pace = 0.00001;
 
 % the weights for each crm
-w = [1 1 0; 1 0 1];
+w = [0.2 0.3 0.5; 0.5 0.3 0.2];
 
 % standard deviation for likelihood
-sigma1 = 0.5;
+sigma1 = 1;
 % standard deviation for base measure
 sigma0 = 1;
 
@@ -60,13 +60,11 @@ for iter = 1:maxIter
             
             % prob for existing clusters
             for k = 1:K
-                q_p = q(:,k);
-                q_p(i) = q_p(i) + 1;
-                if sum(q_p) > 0
-                    prob(k) = log(sum(q_p)) ...
+                if sum(q(:,k)) > 0
+                    prob(k) = log(sum(q(:,k))) ...
                         - 1/2/sigma1^2 * (data(i,j) - centers(k))^2 ...
-                        + log(get_tau(w, u, q_p)) ...
-                        - log(get_tau(w, u, q(:,k)));
+                        + log(get_tau_frac(w, u, q(:,k), i));
+                    get_tau_frac(w, u, q(:,k), i)
                 end
             end
             % prob for new cluster
@@ -104,7 +102,7 @@ for iter = 1:maxIter
     
     % update u1 and u2
     for i = 1:2
-        term1 = 1 / u(i);
+        term1 = (size(data,2) - 1) / u(i);
         
         term2 = 0;
         for r = 1:3
@@ -118,24 +116,13 @@ for iter = 1:maxIter
         q2 = histcounts(ix(2,:), 1:(K+1));
         q = [q1; q2];
         for k = 1:K
-            numerator = 0;
-            for r = 1:3
-                numerator = numerator + sum(q(:,k)) * w(i,r) *...
-                    prod(w(:,r).^q(:,k)) / (u * w(:,r) + 1) ^ (sum(q(:,k)) + 1);
-            end
-            
-            denominator = 0;
-            for r = 1:3
-                denominator = denominator + prod(w(:,r).^q(:,k)) ...
-                    / (u * w(:,r) + 1) ^ sum(q(:,k));
-            end
-            term3 = term3 + numeritor / denominator;
+            term3 = term3 + sum(q(:,k)) * get_tau_frac(w, u, q(:,k), i);
         end
         
         grad = term1 - term2 - term3;
         u(i) = u(i) + pace * grad;
     end
-    fprintf(['iter ', num2str(iter), ' done'])
+    fprintf(['iter ', num2str(iter), ' done\n'])
     
     % monitor u(1)
     u_vec(iter) = u(1);
