@@ -16,7 +16,7 @@ u = ones(1,2);
 u_vec = ones(1, maxIter);
 
 % learning pace for u
-pace = 0.00001;
+pace = 0.001;
 
 % the weights for each crm
 w = [0.2 0.3 0.5; 0.5 0.3 0.2];
@@ -24,12 +24,11 @@ w = [0.2 0.3 0.5; 0.5 0.3 0.2];
 % standard deviation for likelihood
 sigma1 = 1;
 % standard deviation for base measure
-sigma0 = 1;
+sigma0 = 2.6;
 
 
 %% post sampler
 for iter = 1:maxIter
-    
     % update ix(i,j) for each (i,j)
     for i = 1:2
         for j = 1:size(data,2) 
@@ -44,7 +43,7 @@ for iter = 1:maxIter
                 ptr2 = ix(2,:);
                 
                 % delete (i,j)
-                ptr1(j) = [];
+                ptr2(j) = [];
             end
                 
             % the number of cluters
@@ -64,7 +63,7 @@ for iter = 1:maxIter
                     prob(k) = log(sum(q(:,k))) ...
                         - 1/2/sigma1^2 * (data(i,j) - centers(k))^2 ...
                         + log(get_tau_frac(w, u, q(:,k), i));
-                    get_tau_frac(w, u, q(:,k), i)
+%                     fprintf(['tau_k = ', num2str(get_tau_frac(w, u, q(:,k), i)), '\n'])
                 end
             end
             % prob for new cluster
@@ -72,6 +71,7 @@ for iter = 1:maxIter
             for r = 1:size(w,2)
                 tau1 = tau1 + w(i,r) / (u * w(:,r) + 1);
             end
+%             fprintf(['ta1 = ', num2str(tau1), '\n'])
             prob(K+1) = log(alpha) + log(sigma1) ...
                 - log(sigma1^2 + sigma0^2)/2 ...
                 - data(i,j)^2 / 2 / (sigma1^2 + sigma0^2) ...
@@ -83,6 +83,10 @@ for iter = 1:maxIter
             prob = prob / sum(prob);
             
             [~,~,ix(i,j)] = histcounts(rand(1), [0, cumsum(prob)]);
+            
+            if ix(i,j) == K+1
+                centers(K+1) = data(i,j);
+            end
         end
     end
     

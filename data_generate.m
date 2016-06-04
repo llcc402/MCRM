@@ -16,9 +16,9 @@ x4 = randn(1, 100) - 10;
 x5 = randn(1, 100) + 10;
 x6 = randn(1, 100) + 15;
 
-data = zeros(2, 400);
-data(1,:) = [x1, x2, x3, x4];
-data(2,:) = [x1, x2, x3, x4];
+data = zeros(2, 200);
+data(1,:) = [x1, x2];
+data(2,:) = [x1, x2];
 
 figure(1)
 hist(data(1,:), 50)

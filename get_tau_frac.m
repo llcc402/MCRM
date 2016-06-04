@@ -24,3 +24,5 @@ for r = 1:size(w,2)
     
     frac = frac + w(i, r) / wu(r) / s;
 end
+
+end
