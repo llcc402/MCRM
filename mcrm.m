@@ -1,4 +1,4 @@
-function [ix, centers] = mcrm(data, alpha, maxIter)
+function [ix, centers, K_vec] = mcrm(data, alpha, maxIter)
 %% init settings
 if nargin < 2
     alpha = 1;
@@ -12,11 +12,11 @@ ix = ones(size(data));
 centers = zeros(1, size(data,2)) + mean(mean(data));
 
 % auxiliary variable
-u = ones(1,2);
+u = ones(1,2)  *300;
 u_vec = ones(1, maxIter);
 
 % learning pace for u
-pace = 0.001;
+pace = 1;
 
 % the weights for each crm
 w = [0.2 0.3 0.5; 0.5 0.3 0.2];
@@ -26,6 +26,8 @@ sigma1 = 1;
 % standard deviation for base measure
 sigma0 = 2.6;
 
+% the number of clusters for each iteration
+K_vec = zeros(1, maxIter);
 
 %% post sampler
 for iter = 1:maxIter
@@ -93,9 +95,14 @@ for iter = 1:maxIter
     % update centers
     d_vec = data(:);
     ix_vec = ix(:);
+    K = 0;
     B = accumarray(ix_vec, 1:length(ix_vec), [], @(x){x});
     for i = 1:length(B)
         if ~isempty(B{i})
+            % count number of clusters
+            K = K + 1;
+            
+            % update centers
             if length(B{i}) == 1
                 centers(i) = d_vec(B{i});
             else
@@ -103,6 +110,7 @@ for iter = 1:maxIter
             end
         end
     end
+    K_vec(iter) = K;
     
     % update u1 and u2
     for i = 1:2

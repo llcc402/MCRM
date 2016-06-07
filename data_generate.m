@@ -4,21 +4,63 @@
 %     mu_1 = 1/2 N(-5,1) + 1/2 N(-10,1)
 %     mu_2 = 1/2 N(10,1) + 1/2 N(15,1)
 % 
-%     p_1 = 0.1 * mu_0 + 0.2 * mu_1 + 0.7 * mu_3
-%     p_2 = 0.7 * mu_0 + 0.2 * mu_2 + 0.1 * mu_3
+%     p_1 = 0.2 * mu_0 + 0.3 * mu_1 + 0.5 * mu_2
+%     p_2 = 0.5 * mu_0 + 0.3 * mu_1 + 0.2 * mu_2
 
 function data = data_generate()
 
-x1 = randn(1, 100);
-x2 = randn(1, 100) + 5;
-x3 = randn(1, 100) - 5;
-x4 = randn(1, 100) - 10;
-x5 = randn(1, 100) + 10;
-x6 = randn(1, 100) + 15;
+data = zeros(2, 300);
+for i = 1:300
+    u = rand(1);
+    if u < 0.2
+        u1 = rand(1);
+        if u1 < 0.5
+            data(1,i) = randn(1);
+        else
+            data(1,i) = randn(1) + 5;
+        end
+    elseif u < 0.5
+        u1 = rand(1);
+        if u1 < 0.5
+            data(1,i) = randn(1) - 5;
+        else
+            data(1,i) = randn(1) -10;
+        end
+    else
+        u1 = rand(1);
+        if u1 < 0.5
+            data(1,i) = randn(1) + 10;
+        else
+            data(1,i) = randn(1) + 15;
+        end
+    end   
+end
 
-data = zeros(2, 200);
-data(1,:) = [x1, x2];
-data(2,:) = [x1, x2];
+for i = 1:300
+    u = rand(1);
+    if u < 0.5
+        u1 = rand(1);
+        if u1 < 0.5
+            data(2,i) = randn(1);
+        else
+            data(2,i) = randn(1) + 5;
+        end
+    elseif u < 0.8
+        u1 = rand(1);
+        if u1 < 0.5
+            data(2,i) = randn(1) - 5;
+        else
+            data(2,i) = randn(1) -10;
+        end
+    else
+        u1 = rand(1);
+        if u1 < 0.5
+            data(2,i) = randn(1) + 10;
+        else
+            data(2,i) = randn(1) + 15;
+        end
+    end   
+end
 
 figure(1)
 hist(data(1,:), 50)
@@ -27,3 +69,6 @@ title('The first group')
 figure(2)
 hist(data(2,:), 50)
 title('The second group')
+end
+            
+
