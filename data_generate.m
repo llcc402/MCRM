@@ -4,22 +4,22 @@
 %     mu_1 = 1/2 N(-5,1) + 1/2 N(-10,1)
 %     mu_2 = 1/2 N(10,1) + 1/2 N(15,1)
 % 
-%     p_1 = 0.2 * mu_0 + 0.3 * mu_1 + 0.5 * mu_2
-%     p_2 = 0.5 * mu_0 + 0.3 * mu_1 + 0.2 * mu_2
+%     p_1 = 0.01 * mu_0 + 0.3 * mu_1 + 0.69 * mu_2
+%     p_2 = 0.69 * mu_0 + 0.3 * mu_1 + 0.01 * mu_2
 
 function data = data_generate()
 
 data = zeros(2, 300);
 for i = 1:300
     u = rand(1);
-    if u < 0.2
+    if u < 0.01
         u1 = rand(1);
         if u1 < 0.5
             data(1,i) = randn(1);
         else
             data(1,i) = randn(1) + 5;
         end
-    elseif u < 0.5
+    elseif u < 0.31
         u1 = rand(1);
         if u1 < 0.5
             data(1,i) = randn(1) - 5;
@@ -38,14 +38,14 @@ end
 
 for i = 1:300
     u = rand(1);
-    if u < 0.5
+    if u < 0.69
         u1 = rand(1);
         if u1 < 0.5
             data(2,i) = randn(1);
         else
             data(2,i) = randn(1) + 5;
         end
-    elseif u < 0.8
+    elseif u < 0.99
         u1 = rand(1);
         if u1 < 0.5
             data(2,i) = randn(1) - 5;
