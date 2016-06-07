@@ -148,7 +148,10 @@ for iter = 1:maxIter
     % update w
     for i = 1:size(data, 1)
         for r = 1:size(w,2)
-            w(i,r) = w(i,r) + pace_w * update_w_i_r(alpha, w, q, u, i, r);
+            w_new = w(i,r) + pace_w * update_w_i_r(alpha, w, q, u, i, r);
+            if w_new > 0
+                w(i,r)=  w_new;
+            end
         end
     end
     w_vec(iter) = w(1,1);
