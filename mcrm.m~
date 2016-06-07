@@ -1,4 +1,4 @@
-function [ix, centers, K_vec, u_vec, w] = mcrm(data, alpha, maxIter)
+function [ix, centers, K_vec, u_vec] = mcrm(data, alpha, maxIter)
 %% init settings
 if nargin < 2
     alpha = 1;
@@ -12,14 +12,14 @@ ix = ones(size(data));
 centers = zeros(1, size(data,2)) + mean(mean(data));
 
 % auxiliary variable
-u = ones(1,2) * 100;
+u = ones(1,2)  *100;
 u_vec = ones(1, maxIter);
 
 % learning pace for u
 pace = 1;
 
 % learning pace for w
-pace_w = 0.0001;
+pace_w = 0.00001;
 
 % the weights for each crm
 w = ones(2,3);
@@ -145,7 +145,7 @@ for iter = 1:maxIter
     end
     u_vec(iter) = u(1);
 
-    % update w
+        % update w
     for i = 1:size(data, 1)
         for r = 1:size(w,2)
             w(i,r) = w(i,r) + pace_w * update_w_i_r(alpha, w, q, u, i, r);
@@ -153,7 +153,7 @@ for iter = 1:maxIter
     end
     w_vec(iter) = w(1,1);
     
-    fprintf(['iter ', num2str(iter), ' done\n'])
+    
     
 end
 
