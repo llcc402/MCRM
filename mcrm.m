@@ -22,7 +22,7 @@ pace = 1;
 pace_w = 0.0001;
 
 % the weights for each crm
-w = ones(2,3);
+w = ones(2,4);
 
 % standard deviation for likelihood
 sigma1 = 1;
@@ -129,7 +129,7 @@ for iter = 1:maxIter
         term1 = (size(data,2) - 1) / u(i);
         
         term2 = 0;
-        for r = 1:3
+        for r = 1:size(w, 2)
             term2 = term2 + w(i,r)/(1 + u * w(:,r));
         end
         term2 = alpha * term2;
