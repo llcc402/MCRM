@@ -1,4 +1,4 @@
-function [ix, centers, K_vec, u_vec, w_1_1_vec, w_1_2_vec,w_1_3_vec,w_2_1_vec,w_2_2_vec,w_2_3_vec] = mcrm(data, alpha, maxIter)
+function [ix, centers, K_vec, u_vec, w, w_1_1_vec, w_1_2_vec,w_1_3_vec,w_2_1_vec,w_2_2_vec,w_2_3_vec] = mcrm(data, alpha, maxIter)
 %% init settings
 if nargin < 2
     alpha = 1;
@@ -19,15 +19,15 @@ u_vec = ones(1, maxIter);
 pace = 1;
 
 % learning pace for w
-pace_w = 0.0003;
+pace_w = 0.003;
 
 % the weights for each crm
 w = ones(2,3);
 
 % standard deviation for likelihood
-sigma1 = 1;
+sigma1 = 3;
 % standard deviation for base measure
-sigma0 = 2.6;
+sigma0 = 6;
 
 % the number of clusters for each iteration
 K_vec = zeros(1, maxIter);
