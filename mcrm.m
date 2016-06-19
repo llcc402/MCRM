@@ -1,4 +1,4 @@
-function [ix, centers, K_vec, u_vec, w] = mcrm(data, alpha, maxIter)
+function [ix, centers, K_vec, u_vec, w, w_1_1_vec, w_1_2_vec,w_1_3_vec,w_2_1_vec,w_2_2_vec,w_2_3_vec] = mcrm(data, alpha, maxIter)
 %% init settings
 if nargin < 2
     alpha = 1;
@@ -19,21 +19,26 @@ u_vec = ones(1, maxIter);
 pace = 1;
 
 % learning pace for w
-pace_w = 0.0001;
+pace_w = 0.003;
 
 % the weights for each crm
-w = ones(2,4);
+w = ones(2,3);
 
 % standard deviation for likelihood
-sigma1 = 1;
+sigma1 = 3;
 % standard deviation for base measure
-sigma0 = 2.6;
+sigma0 = 6;
 
 % the number of clusters for each iteration
 K_vec = zeros(1, maxIter);
 
 % monitor w
-w_vec = zeros(1,maxIter);
+w_1_1_vec = zeros(1,maxIter);
+w_1_2_vec = zeros(1,maxIter);
+w_1_3_vec = zeros(1,maxIter);
+w_2_1_vec = zeros(1,maxIter);
+w_2_2_vec = zeros(1,maxIter);
+w_2_3_vec = zeros(1,maxIter);
 
 %% post sampler
 for iter = 1:maxIter
@@ -154,7 +159,12 @@ for iter = 1:maxIter
             end
         end
     end
-    w_vec(iter) = w(1,1);
+    w_1_1_vec(iter) = w(1,1);
+    w_1_2_vec(iter) = w(1,2);
+    w_1_3_vec(iter) = w(1,3);
+    w_2_1_vec(iter) = w(2,1);
+    w_2_2_vec(iter) = w(2,2);
+    w_2_3_vec(iter) = w(2,3);
     
     fprintf(['iter ', num2str(iter), ' done\n'])
     
@@ -167,7 +177,7 @@ plot(u_vec)
 
 % monitor w(1)
 figure(2)
-plot(w_vec)
+plot(w_1_1_vec)
 
 end
 
