@@ -17,7 +17,7 @@ pace = 1;
 pace_w = 0.003;
 
 % the weights for each crm
-w = ones(2,2);
+w = ones(2,4);
 
 % standard deviation for likelihood
 sigma1 = 3;
